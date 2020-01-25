@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!--- Start to load jquery & serialize --->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$.fn.serializeObject = function() {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name]) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+</script>
+<!--- End loading jquery & serialize --->
+<style>
+label { display: inline-block; width: 50px; text-align: left; }
+</style>
+</head>
+<body>
+<form id="elite-form">
+<div id="stopwatch">
+      <!-- [DISPLAY TIMER] -->
+      <div id="sw-time">00:00</div>
+      <!-- [START/STOP BUTTON] -->
+      <input type="button" value="Start" id="sw-go" disabled/>
+      <!-- [RESET BUTTON] -->
+      <input type="button" value="Reset" id="sw-rst" disabled/>
+      <!-- [FILL TIME FIELD BUTTON] -->
+      <input type="button" value="Fill" id="sw-fill" disabled/>
+    </div>
+
+ <div>
+ <br/>
+ <label>Length</label>
+ <input type="text" name="Length" id="Length"/>
+ <button type="button" onclick="document.getElementById('Length').value = ''">Clear</button>
+ </div>
+ <div>
+ <label>Stack</label>
+ <input type="radio" name="Stack" value="x" checked>x</>
+ <input type="radio" name="Stack" value="o">o<br>
+ <input type="hidden" id="GP Value" name="GP Value" value=" ">
+ <input type="hidden" id="Rerolled" name="Rerolled" value="">
+ <input type="hidden" id="Notes" name="Notes" value="">
+ <input type="hidden" id="Tickets" name="Tickets" value="">
+ </div>
+ <div>
+ <button type="submit"id="submit-form">Submit</button>
+ </div>
+ </form>
+ <br/>
+ <button onclick="window.location.href = 'https://abhorrentrs.github.io/rs-clue-sheet/index.html';">Go Home</button>
+
+ 
+ <script>
+    var sw = {
+  /* [INIT] */
+  etime : null, // holds HTML time display
+  erst : null, // holds HTML reset button
+  ego : null, // holds HTML start/stop button
+  efill : null, // holds HTML fill button
+  timer : null, // timer object
+  now : 0, // current timer
+  init : function () {
+    // Get HTML elements
+    sw.etime = document.getElementById("sw-time");
+    sw.erst = document.getElementById("sw-rst");
+    sw.ego = document.getElementById("sw-go");
+    sw.efill = document.getElementById("sw-fill");
+
+    // Attach listeners
+    sw.erst.addEventListener("click", sw.reset);
+    sw.erst.disabled = false;
+    sw.ego.addEventListener("click", sw.start);
+    sw.ego.disabled = false;
+    sw.efill.addEventListener("click", sw.fill);
+    sw.efill.disabled = false;
+  },
+
+  /* [ACTIONS] */
+  tick : function () {
+  // tick() : update display if stopwatch running
+
+    // Calculate hours, mins, seconds
+    sw.now++;
+    var remain = sw.now;
+    // var hours = Math.floor(remain / 3600);
+    // remain -= hours * 3600;
+    var mins = Math.floor(remain / 60);
+    remain -= mins * 60;
+    var secs = remain;
+
+    // Update the display timer
+    // if (hours<10) { hours = "0" + hours; }
+    if (mins<10) { mins = "0" + mins; }
+    if (secs<10) { secs = "0" + secs; }
+    sw.etime.innerHTML = mins + ":" + secs;
+  },
+
+  start : function () {
+  // start() : start the stopwatch
+
+    sw.timer = setInterval(sw.tick, 1000);
+    sw.ego.value = "Stop";
+    sw.ego.removeEventListener("click", sw.start);
+    sw.ego.addEventListener("click", sw.stop);
+  },
+
+  stop  : function () {
+  // stop() : stop the stopwatch
+
+    clearInterval(sw.timer);
+    sw.timer = null;
+    sw.ego.value = "Start";
+    sw.ego.removeEventListener("click", sw.stop);
+    sw.ego.addEventListener("click", sw.start);
+  },
+
+  reset : function () {
+  // reset() : reset the stopwatch
+
+    // Stop if running
+    if (sw.timer != null) { sw.stop(); }
+
+    // Reset time
+    sw.now = -1;
+    sw.tick();
+  },
+  
+  fill : function () {
+  document.getElementById("Length").value=sw.etime.innerHTML;
+  }
+};
+
+window.addEventListener("load", sw.init);
+
+
+var $form = $('form#elite-form'),
+    url = 'https://script.google.com/macros/s/AKfycbxb1DiCU6NJDVAzsoD8Aua6odageP-4uyQjUsLsJfyRM9zn7X4/exec'
+
+$('#submit-form').on('click', function(e) {
+  e.preventDefault();
+  var jqxhr = $.ajax({
+    url: url,
+    method: "GET",
+    dataType: "json",
+    data: $form.serializeObject(),
+	success: function(){
+	location.reload();
+	}
+})
+});
+</script>
+</body>
+</html>
