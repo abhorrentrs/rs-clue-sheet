@@ -1,0 +1,16 @@
+{
+	"appName": "Clue Tracker - AJ",
+	"description": "This app has forms connected to my Clue sheet.",
+	"appUrl": "/rs-clue-sheet/index.html/",
+	"configUrl": "/rs-clue-sheet/appconfig.json",
+	"iconUrl": "/rs-clue-sheet/Clue_scroll.png",
+	"defaultWidth": 300,
+	"defaultHeight": 550,
+	"minWidth": 300,
+	"minHeight": 550,
+	"maxWidth": 410,
+	"maxHeight": 700,
+	"requestHandlers": [ ],
+	"activators": [ ],
+	"permissions": "pixel,overlay,gamestate"
+}
