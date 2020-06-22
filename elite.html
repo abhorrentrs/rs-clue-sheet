@@ -40,11 +40,16 @@ label { display: inline-block; width: 50px; text-align: left; }
  <div>
  <br/>
  <label>Steps</label>
- <input type="text" name="Steps"/>
+ <button onclick="compassFunction()" type="button">co</button>
+ <button onclick="celticFunction()" type="button">ce</button>
+ <button onclick="sliderFunction()" type="button">sl</button>
+ <br/>
+ <input type="text" name="Steps" id="Steps"/>
  </div>
  <div>
  <label>Length</label>
- <input type="text" name="Length" id="Length"/>
+ <br/>
+ <input type="text" name="Length" id="Length" size=10/>
  <button type="button" onclick="document.getElementById('Length').value = ''">Clear</button>
  </div>
  <div>
@@ -143,8 +148,20 @@ label { display: inline-block; width: 50px; text-align: left; }
   }
 };
 
-window.addEventListener("load", sw.init);
+function compassFunction() {
+var currentSteps = document.getElementById("Steps");
+    currentSteps.value += 'co ';
+}
+function celticFunction() {
+var currentSteps = document.getElementById("Steps");
+    currentSteps.value += 'ce ';
+}
+function sliderFunction() {
+var currentSteps = document.getElementById("Steps");
+    currentSteps.value += 'sl ';
+}
 
+window.addEventListener("load", sw.init);
 
 var $form = $('form#elite-form'),
     url = 'https://script.google.com/macros/s/AKfycbye9ngSeg5XMjdm2Gdsuai3rZVHCmitgNOlfuOpuFxQf6GxFe_O/exec'
